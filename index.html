@@ -1,0 +1,168 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display" rel="stylesheet">
+<main style="box-sizing: border-box; display: flex; justify-content: center; flex-direction: column; width: 100%; padding: 25px; font-family: Montserrat, system-ui; text-align: center;">
+    <div id="desc" style="display: flex; flex-direction: row; width: 100%;">
+        <h2 style="width: 100%; font-weight: 400;">All material is sold by the cubic yard (4 1/2 wheelbarrow loads). One cubic yard will cover 100 square feet (length 10' x width 10') 3 inches deep.</h2>
+        <div style="width: 100%;">
+            <h2 style="font-weight: 400;"><b style="font-weight: 600;">Deliveries:</b> Mon-Sat 7:30-5:00 (<b style="font-weight: 600;">SAME DAY</b> delivery available)</h2>
+            <h2 style="font-weight: 400;"><b style="font-weight: 600;">Call:</b> 781-344-2749 (credit card over the phone welcomed)</h2>
+        </div>
+    </div>
+    <h1 style="font-family: 'Playfair Display', sans-serif;">Calculate how much Mulch you will need</h1>
+    <form id="form" style="display: flex; flex-direction: row; justify-content: center; gap: 25px; flex-wrap: wrap">
+        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+            <p>Shape</p>
+            <select name="type">
+                <option value="rect">Rectangle</option>
+                <option value="oval">Oval</option>
+            </select>
+        </div>
+        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+            <p>Length (ft.)</p>
+            <input name="len" placeholder="5" type="number">
+        </div>
+        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+            <p>Width (ft.)</p>
+            <input name="width" placeholder="5" type="number">
+        </div>
+        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+            <p>Thickness (in.)</p>
+            <input name="thick" placeholder="5" type="number">
+        </div>
+        <input type="submit" id="calc" style="border: 1px rgba(0, 0, 0, 0.1); background: #1d8b1b; border-radius: 7px; padding: 5px 15px; color: #FFFFFF; font-family: Montserrat, system-ui; font-weight: 600; font-size: 24px" value="Calculate">
+    </form>
+    <output for="calc" form="form" name="out">
+        Garden Size (sq. ft.): <b>25</b> <br />
+        You will need: <b>6</b> 2-cubic-foot bags. <br />
+        You'll need: <b>0.42 cubic yards.</b>
+    </output>
+</main>
+<style>
+    p, h1, h2 {
+        margin: 0;
+    }
+
+    h2, h1 {
+        line-height: 120%;
+        margin: 10px 0;
+    }
+
+    select, input {
+        border: 1px rgba(0, 0, 0, 0.1);
+        background: #FFFFFF;
+        filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+        border-radius: 7px;
+        padding: 15px 5px;
+    }
+
+    p {
+        font-size: 20px;
+    }
+    
+    @media (device-width < 900px) {
+        main {
+            padding: 40px !important;
+        }
+
+        #desc {
+            flex-direction: column !important;
+            gap: 15px;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+
+        h1 {
+            font-size: 48px;
+        }
+
+        form {
+            flex-direction: column !important;
+        }
+
+        form > div {
+            justify-content: center;
+        }
+
+        p {
+            font-size: 36px;
+        }
+
+        select, input {
+            font-size: 24px;
+        }
+
+        #calc {
+            padding: 10px 25px !important;
+            font-size: 36px !important;
+            width: fit-content !important;
+            align-self: center;
+        }
+
+        output {
+            font-size: 32px;
+        }
+    }
+
+    @media (device-width < 400px) {
+        #desc {
+            gap: 20px;
+        }
+
+        h2 {
+            font-size: 16px;
+        }
+
+        h1 {
+            font-size: 72px;
+        }
+
+        p {
+            font-size: 48px;
+        }
+
+        select, input {
+            font-size: 36px;
+        }
+
+        #calc {
+            padding: 15px 30px !important;
+            font-size: 48px !important;
+        }
+
+        output {
+            font-size: 36px;
+        }
+    }
+</style>
+<script>
+    document.querySelector('form').addEventListener('submit', submit)
+
+    function submit(e) {
+		e.preventDefault()
+        const ss = document.getElementById('form').elements
+        if (ss.len.value == 0 || ss.width.value == 0 || ss.thick.value == 0) {
+	        ss.out.innerHTML = `
+                Garden Size (sq. ft.): <b>25</b> <br />
+                You will need: <b>6</b> 2-cubic-foot bags. <br />
+                You'll need: <b>0.42 cubic yards.</b>
+            `
+        } else if (ss.type.value === 'rect') {
+	        ss.out.innerHTML = `
+                Garden Size (sq. ft.): <b>${ss.len.value * ss.width.value}</b> <br />
+                You will need: <b>${Math.ceil(((ss.thick.value / 12) * (ss.len.value * ss.width.value)) / 2)}</b> 2-cubic-foot bags. <br />
+                You'll need: <b>${(Math.ceil(((ss.len.value / 10) * (ss.width.value / 10) * (ss.thick.value / 3)) * 100)) / 100} cubic yards.</b>
+            `
+        } else if (ss.type.value === 'oval') {
+			const area = Math.ceil(((ss.len.value / 2) * (ss.width.value / 2) * 3.14159) * 100) / 100
+	        ss.out.innerHTML = `
+                Garden Size (sq. ft.): <b>${area}</b> <br />
+                You will need: <b>${Math.ceil(((ss.thick.value / 12) * area) / 2)}</b> 2-cubic-foot bags. <br />
+                You'll need: <b>${(Math.ceil((area * (ss.thick.value / 3)) * 100)) / 100} cubic yards.</b>
+            `
+        }
+    }
+</script>
